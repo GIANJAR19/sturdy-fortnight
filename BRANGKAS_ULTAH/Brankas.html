@@ -10,7 +10,8 @@ body{
     margin:0;
     font-family:'Segoe UI',sans-serif;
     background:linear-gradient(135deg,#ff5fa2,#ffc1dc);
-    overflow:hidden;
+    overflow-y: auto;
+    min-height: 100vh;
 }
 
 /* Box */
@@ -101,6 +102,52 @@ video{
     margin-top:10px;
     display:none;
 }
+@media (max-width: 480px) {
+    .box{
+        width: 90%;
+        margin: 20px auto;
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    h2{
+        font-size: 18px;
+    }
+
+    p{
+        font-size: 13px;
+    }
+
+    button{
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .keypad button{
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .typing{
+        font-size: 13px;
+        min-height: 60px;
+    }
+
+    .slider img{
+        max-height: 180px;
+        object-fit: cover;
+    }
+
+    video{
+        max-height: 200px;
+    }
+}
+
+.slider img{
+    max-height: 220px;
+    object-fit: cover;
+}
+
 </style>
 </head>
 
