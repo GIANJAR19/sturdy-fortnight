@@ -155,6 +155,7 @@ video{
 
 <audio id="music" src="3.mp3" loop></audio>
 
+
 <div class="box" id="box">
 
 <!-- 🔒 LOCK -->
@@ -313,10 +314,35 @@ function hearts(){
 
 /* Video */
 function showVideo(){
-    const v=document.getElementById("video");
-    v.style.display="block";
-    v.play();
+    const video = document.getElementById("video");
+    const music = document.getElementById("music");
+
+    // Matikan musik
+    music.pause();
+    music.currentTime = 0;
+
+    // Tampilkan & play video
+    video.style.display = "block";
+    video.play();
+
+    // FULLSCREEN otomatis (HP & Laptop)
+    if (video.requestFullscreen) {
+        video.requestFullscreen();
+    } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen(); // Safari
+    } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen(); // IE/Edge lama
+    }
+
+    // (Opsional) Musik hidup lagi setelah video selesai
+    video.onended = () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        }
+        music.play();
+    };
 }
+
 </script>
 
 </body>
