@@ -1,92 +1,275 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Brankas Ucapan Ulang Tahun</title>
-    <meta name="description" content="Brankas digital berisi ucapan ulang tahun romantis">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brankas Ulang Tahun 💖</title>
 
-    <title>Brankas Rahasia ❤️</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #ff758c, #ff7eb3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
-        .brankas {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            width: 300px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        input {
-            width: 90%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            background-color: #ff5e78;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #ff3f5f;
-        }
-        .pesan {
-            margin-top: 20px;
-            font-size: 16px;
-            display: none;
-        }
-    </style>
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#ff5fa2,#ffc1dc);
+    overflow:hidden;
+}
+
+/* Box */
+.box{
+    width:340px;
+    background:white;
+    margin:60px auto;
+    padding:20px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 15px 30px rgba(0,0,0,.3);
+    animation:zoom .6s;
+    z-index:2;
+    position:relative;
+}
+@keyframes zoom{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+
+h2{color:#e91e63}
+
+/* Keypad */
+.keypad{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:15px;
+}
+.keypad button{
+    padding:15px;
+    font-size:18px;
+    border:none;
+    border-radius:12px;
+    background:#ffe0ef;
+    color:#e91e63;
+    cursor:pointer;
+    transition:.2s;
+}
+.keypad button:active{
+    transform:scale(.9);
+    background:#ffb6d6;
+}
+
+.pin-box{
+    font-size:22px;
+    letter-spacing:10px;
+    border-bottom:2px solid #e91e63;
+    margin:10px auto;
+    width:120px;
+    height:30px;
+}
+
+/* Content */
+.content{display:none}
+.slider img{
+    width:100%;
+    border-radius:15px;
+    display:none;
+}
+.slider img.active{display:block}
+
+.countdown{
+    color:#e91e63;
+    font-weight:bold;
+    margin:8px 0;
+}
+
+/* Typing */
+.typing{
+    min-height:70px;
+    font-size:14px;
+    color:#444;
+}
+
+/* Heart */
+.heart{
+    position:fixed;
+    top:-10px;
+    color:#ff2f92;
+    animation:fall linear forwards;
+}
+@keyframes fall{
+    to{transform:translateY(110vh);opacity:0}
+}
+
+/* Gift */
+video{
+    width:100%;
+    border-radius:15px;
+    margin-top:10px;
+    display:none;
+}
+</style>
 </head>
+
 <body>
 
-<div class="brankas">
+<audio id="music" src="3.mp3" loop></audio>
+
+<div class="box" id="box">
+
+<!-- 🔒 LOCK -->
+<div id="lock">
     <h2>🔐 Brankas Cinta</h2>
-    <p>Masukkan password rahasia</p>
+    <div class="pin-box" id="pinBox">----</div>
 
-    <input type="password" id="password" placeholder="Password...">
-    <br>
-    <button onclick="bukaBrankas()">Buka Brankas</button>
-
-    <div class="pesan" id="pesan">
-        <h3>🎉 Selamat Ulang Tahun Sayang ❤️</h3>
-        <p>
-            Semoga kamu selalu sehat, bahagia,  
-            dan semua impianmu tercapai.  
-            Aku bersyukur punya kamu 🤍  
-            I love you forever 💕
-        </p>
+    <div class="keypad">
+        <button onclick="addPin(1)">1</button>
+        <button onclick="addPin(2)">2</button>
+        <button onclick="addPin(3)">3</button>
+        <button onclick="addPin(4)">4</button>
+        <button onclick="addPin(5)">5</button>
+        <button onclick="addPin(6)">6</button>
+        <button onclick="addPin(7)">7</button>
+        <button onclick="addPin(8)">8</button>
+        <button onclick="addPin(9)">9</button>
+        <button onclick="clearPin()">⌫</button>
+        <button onclick="addPin(0)">0</button>
+        <button onclick="checkPin()">✔</button>
     </div>
+
+    <p id="error" style="color:red;"></p>
+</div>
+
+<!-- 💖 CONTENT -->
+<div id="content" class="content">
+    <h2>🎉 Selamat Ulang Tahun <span id="nama"></span> 💖</h2>
+
+    <div class="slider">
+        <img src="1.jpg" class="active">
+        <img src="2.png">
+        <img src="5.webp">
+    </div>
+
+    <div class="countdown" id="countdown"></div>
+
+    <div class="typing" id="typing"></div>
+
+    <button onclick="showVideo()">🎁 Buka Hadiah Video</button>
+
+    <video id="video" controls>
+        <source src="4.mp4" type="video/mp4">
+    </video>
+</div>
+
 </div>
 
 <script>
-    function bukaBrankas() {
-        // Password rahasia (ubah sesuai keinginan)
-        const passwordBenar = "21042007";
+/* ===== SETTING ===== */
+const PIN_BENAR = "2104";
+const NAMA = "Sayangkuu Siti Kartini";
+const ULTAH = new Date("21-04-2025,00:00:00");
+const PESAN = [
+"Selamat ulang tahun untuk orang paling spesial di hidup aku 💖",
+"Terima kasih sudah menjadi tempat pulang,",
+"tempat cerita, dan tempat bahagia aku.",
+"Semoga hari ini dan hari-hari berikutnya",
+"selalu dipenuhi cinta, tawa, dan mimpi yang tercapai.",
+"Aku bangga punya kamu dan aku sayang kamu sepenuh hati 🤍"
+];
+/* ================== */
 
-        const input = document.getElementById("password").value;
-        const pesan = document.getElementById("pesan");
+document.getElementById("nama").innerText = NAMA;
 
-        if (input === passwordBenar) {
-            pesan.style.display = "block";
-            alert("Brankas terbuka! ❤️");
-        } else {
-            alert("Password salah! 🔒");
-        }
+let pinInput = "";
+
+/* Keypad */
+function addPin(n){
+    if(pinInput.length < 4){
+        pinInput += n;
+        updatePin();
     }
+}
+function clearPin(){
+    pinInput = pinInput.slice(0,-1);
+    updatePin();
+}
+function updatePin(){
+    document.getElementById("pinBox").innerText =
+        pinInput.padEnd(4,"-").replace(/./g,"•");
+}
+function checkPin(){
+    if(pinInput === PIN_BENAR){
+        openSafe();
+    }else{
+        document.getElementById("error").innerText = "PIN salah 😢";
+        pinInput="";
+        updatePin();
+    }
+}
+
+/* Open */
+function openSafe(){
+    lock.style.display="none";
+    content.style.display="block";
+    music.play();
+    hearts();
+    slider();
+    countdown();
+    typingEffect();
+}
+
+/* Typing */
+function typingEffect(){
+    let i=0,j=0;
+    const el=document.getElementById("typing");
+    setInterval(()=>{
+        if(i < PESAN.length){
+            if(j < PESAN[i].length){
+                el.innerHTML += PESAN[i][j];
+                j++;
+            }else{
+                el.innerHTML += "<br>";
+                i++; j=0;
+            }
+        }
+    },60);
+}
+
+/* Slider */
+function slider(){
+    const imgs=document.querySelectorAll(".slider img");
+    let i=0;
+    setInterval(()=>{
+        imgs[i].classList.remove("active");
+        i=(i+1)%imgs.length;
+        imgs[i].classList.add("active");
+    },2500);
+}
+
+/* Countdown */
+function countdown(){
+    setInterval(()=>{
+        const d=ULTAH-new Date();
+        if(d<=0){
+            countdown.innerText="🎂 Hari ini ulang tahun kamu 💖";
+            return;
+        }
+        countdown.innerText=`⏳ ${Math.floor(d/86400000)} hari lagi`;
+    },1000);
+}
+
+/* Hearts */
+function hearts(){
+    setInterval(()=>{
+        const h=document.createElement("div");
+        h.className="heart";
+        h.innerText="❤️";
+        h.style.left=Math.random()*100+"vw";
+        h.style.animationDuration=(2+Math.random()*3)+"s";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),5000);
+    },300);
+}
+
+/* Video */
+function showVideo(){
+    const v=document.getElementById("video");
+    v.style.display="block";
+    v.play();
+}
 </script>
 
 </body>
